@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
@@ -24,6 +24,17 @@
     .footer{background:var(--black);color:#fff;}
     .lead-claim{font-weight:600;}
   </style>
+  <link rel="canonical" href="https://falbohernan.github.io/orquesta-mataderos/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Voces del barrio • Orquesta Infanto Juvenil de Mataderos">
+<meta property="og:description" content="30/10 – 16:45 • Cine Teatro El Plata • Entrada libre y gratuita">
+<meta property="og:url" content="https://falbohernan.github.io/orquesta-mataderos/">
+<meta property="og:image" content="https://falbohernan.github.io/orquesta-mataderos/img/social.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Voces del barrio • Orquesta Mataderos">
+<meta name="twitter:description" content="30/10 – 16:45 • Cine Teatro El Plata • Entrada libre y gratuita">
+<meta name="twitter:image" content="https://falbohernan.github.io/orquesta-mataderos/img/social.jpg">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg sticky-top">
@@ -78,18 +89,57 @@
   <div class="p-4 bg-white rounded shadow-sm h-100 text-center">
     <p class="mb-2">Compartí el evento con este QR</p>
 
-    <!-- QR visible (200px) con opción 2x para pantallas retina -->
+    <!-- QR visible (retina-ready con srcset) -->
     <img
+      id="qrImg"
       src="https://quickchart.io/qr?text=https%3A%2F%2Ffalbohernan.github.io%2Forquesta-mataderos%2F&size=200"
       srcset="https://quickchart.io/qr?text=https%3A%2F%2Ffalbohernan.github.io%2Forquesta-mataderos%2F&size=400 2x"
       alt="QR Concierto Orquesta Mataderos"
       width="200" height="200" loading="lazy">
 
-    <p class="text-muted small mt-2">
-      <code>https://falbohernan.github.io/orquesta-mataderos/</code>
-    </p>
+    <!-- Botonera de compartir -->
+    <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+      <!-- Web Share API (móviles) -->
+      <button id="btnShare" class="btn btn-dark btn-sm">
+        Compartir desde el cel
+      </button>
+
+      <!-- Copiar link -->
+      <button id="btnCopy" class="btn btn-outline-dark btn-sm">
+        Copiar link
+      </button>
+
+      <!-- WhatsApp -->
+      <a id="btnWA" class="btn btn-success btn-sm" target="_blank" rel="noopener">
+        WhatsApp
+      </a>
+
+      <!-- Telegram -->
+      <a id="btnTG" class="btn btn-primary btn-sm" target="_blank" rel="noopener" style="background:#27A7E7;border-color:#27A7E7">
+        Telegram
+      </a>
+
+      <!-- Facebook -->
+      <a id="btnFB" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">
+        Facebook
+      </a>
+
+      <!-- X/Twitter -->
+      <a id="btnX" class="btn btn-outline-dark btn-sm" target="_blank" rel="noopener">
+        X
+      </a>
+
+      <!-- Descargar QR -->
+      <a id="btnDL" class="btn btn-outline-secondary btn-sm" download="orquesta-mataderos-qr.png">
+        Descargar QR
+      </a>
+    </div>
+
+    <!-- Feedback mini -->
+    <div id="shareMsg" class="small mt-2" style="display:none;"></div>
   </div>
 </div>
+
 
       </div>
     </div>
@@ -120,6 +170,64 @@
     </div>
   </div>
 </footer>
+<script>
+  // tu URL pública
+  const shareUrl = 'https://falbohernan.github.io/orquesta-mataderos/';
+  const shareText = 'Concierto "Voces del barrio" • Orquesta Infanto Juvenil de Mataderos • 30/10 – 16:45 • Cine Teatro El Plata';
+  const shareTitle = 'Voces del barrio • Orquesta Mataderos';
+</script>
+<script>
+  (function() {
+    // Construir enlaces con shareUrl / shareText definidos antes
+    const encUrl  = encodeURIComponent(shareUrl);
+    const encText = encodeURIComponent(shareText);
+
+    // Enlaces sociales
+    document.getElementById('btnWA').href = `https://wa.me/?text=${encText}%20${encUrl}`;
+    document.getElementById('btnTG').href = `https://t.me/share/url?url=${encUrl}&text=${encText}`;
+    document.getElementById('btnFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+    document.getElementById('btnX').href  = `https://twitter.com/intent/tweet?url=${encUrl}&text=${encText}`;
+
+    // Descargar QR (PNG grande para imprimir)
+    const dl = document.getElementById('btnDL');
+    dl.href = `https://quickchart.io/qr?text=${encUrl}&size=1024`;
+
+    // Web Share API (móviles)
+    const msg = document.getElementById('shareMsg');
+    document.getElementById('btnShare').addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+        } catch(e) {
+          msg.textContent = 'No se pudo compartir. Probá otra opción.';
+          msg.style.display = 'block';
+        }
+      } else {
+        msg.textContent = 'Tu navegador no soporta compartir directo. Usá WhatsApp/Telegram o copiá el link.';
+        msg.style.display = 'block';
+      }
+    });
+
+    // Copiar al portapapeles
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        msg.textContent = 'Link copiado. ¡Pegalo donde quieras!';
+        msg.style.display = 'block';
+      } catch(e) {
+        // Fallback (viejos navegadores)
+        const tmp = document.createElement('input');
+        tmp.value = shareUrl;
+        document.body.appendChild(tmp);
+        tmp.select(); document.execCommand('copy'); document.body.removeChild(tmp);
+        msg.textContent = 'Link copiado (método alternativo).';
+        msg.style.display = 'block';
+      }
+    });
+  })();
+</script>
+
 
 </body>
 </html>
+
