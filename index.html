@@ -75,12 +75,22 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="p-4 bg-white rounded shadow-sm h-100 text-center">
-            <p class="mb-2">Compartí el evento con este QR</p>
-            <img src="promo-mataderos-qr.png" alt="QR Concierto Orquesta Mataderos" width="200" height="200">
-            <p class="text-muted small mt-2"><code>https://example.com/promo-mataderos</code></p>
-          </div>
-        </div>
+  <div class="p-4 bg-white rounded shadow-sm h-100 text-center">
+    <p class="mb-2">Compartí el evento con este QR</p>
+
+    <!-- QR visible (200px) con opción 2x para pantallas retina -->
+    <img
+      src="https://quickchart.io/qr?text=https%3A%2F%2Ffalbohernan.github.io%2Forquesta-mataderos%2F&size=200"
+      srcset="https://quickchart.io/qr?text=https%3A%2F%2Ffalbohernan.github.io%2Forquesta-mataderos%2F&size=400 2x"
+      alt="QR Concierto Orquesta Mataderos"
+      width="200" height="200" loading="lazy">
+
+    <p class="text-muted small mt-2">
+      <code>https://falbohernan.github.io/orquesta-mataderos/</code>
+    </p>
+  </div>
+</div>
+
       </div>
     </div>
   </section>
